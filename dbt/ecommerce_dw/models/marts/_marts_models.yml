@@ -1,0 +1,68 @@
+version: 2
+
+models:
+  - name: fct_orders
+    description: "Fact table with one row per order. Includes customer info, order values, timing metrics, payments, and reviews."
+    columns:
+      - name: order_id
+        description: "Primary key"
+        tests:
+          - unique
+          - not_null
+      - name: customer_unique_id
+        description: "Unique customer identifier"
+        tests:
+          - not_null
+      - name: order_status
+        tests:
+          - not_null
+      - name: order_total
+        description: "Total order value in BRL"
+      - name: order_date
+        description: "Date of purchase"
+        tests:
+          - not_null
+
+  - name: dim_customers
+    description: "Customer dimension with lifetime metrics. One row per unique customer."
+    columns:
+      - name: customer_unique_id
+        description: "Primary key"
+        tests:
+          - unique
+          - not_null
+      - name: total_orders
+        description: "Lifetime order count"
+      - name: lifetime_value
+        description: "Total spend in BRL"
+      - name: engagement_tier
+        description: "Customer engagement level (low, medium, high)"
+        tests:
+          - accepted_values:
+              values: ['low', 'medium', 'high']
+
+  - name: dim_products
+    description: "Product dimension with sales and review metrics."
+    columns:
+      - name: product_id
+        description: "Primary key"
+        tests:
+          - unique
+          - not_null
+      - name: category
+        description: "English product category"
+      - name: total_revenue
+        description: "Lifetime revenue in BRL"
+
+  - name: dim_sellers
+    description: "Seller dimension with performance and review metrics."
+    columns:
+      - name: seller_id
+        description: "Primary key"
+        tests:
+          - unique
+          - not_null
+      - name: total_revenue
+        description: "Lifetime revenue in BRL"
+      - name: avg_review_score
+        description: "Average customer review score"

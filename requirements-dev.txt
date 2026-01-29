@@ -1,0 +1,15 @@
+# Include base requirements
+-r requirements.txt
+
+# Additional dev tools
+ipython==8.19.0
+jupyter==1.0.0
+jupyterlab==4.0.9
+
+# Code quality
+pylint==3.0.3
+mypy==1.8.0
+
+# Testing
+pytest-cov==4.1.0
+pytest-mock==3.12.0

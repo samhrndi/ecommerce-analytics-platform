@@ -1,0 +1,59 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+.venv/
+*.egg-info/
+dist/
+build/
+
+# dbt
+**/target/
+**/dbt_packages/
+**/logs/
+dbt/profiles.yml
+dbt/.user.yml
+dbt/**/package-lock.yml
+
+# Data files
+data/raw/*.csv
+data/processed/*.csv
+*.parquet
+
+# Environment variables
+.env
+.env.local
+*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Angular
+angular-dashboard/node_modules/
+angular-dashboard/dist/
+angular-dashboard/.angular/
+
+# Credentials & Keys
+*credentials*.json
+*secret*.json
+*.pem
+*.key
+*.p8
+rsa_key.p8
+rsa_key.pub
+*.pub
+
+# Logs
+*.log

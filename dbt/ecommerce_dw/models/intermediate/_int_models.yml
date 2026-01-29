@@ -1,0 +1,30 @@
+version: 2
+
+models:
+  - name: int_orders_enriched
+    description: "Orders enriched with aggregated items, payments, and reviews data"
+    columns:
+      - name: order_id
+        description: "Primary key"
+        tests:
+          - unique
+          - not_null
+      - name: customer_id
+        tests:
+          - not_null
+      - name: order_total
+        description: "Total order value (items + freight)"
+      - name: is_delivered_on_time
+        description: "Whether the order was delivered by the estimated date"
+
+  - name: int_order_items_enriched
+    description: "Order items enriched with order, product, and seller context"
+    columns:
+      - name: order_id
+        tests:
+          - not_null
+      - name: order_item_id
+        tests:
+          - not_null
+      - name: product_category
+        description: "English product category name"

@@ -1,0 +1,148 @@
+version: 2
+
+sources:
+  - name: raw
+    database: "{{ target.database }}"
+    schema: raw
+    description: "Raw Brazilian e-commerce data loaded from CSV files"
+
+    tables:
+      - name: customers
+        description: "Customer information including location"
+        columns:
+          - name: customer_id
+            description: "Key to the orders dataset. Each order has a unique customer_id"
+          - name: customer_unique_id
+            description: "Unique identifier of a customer across orders"
+          - name: customer_zip_code_prefix
+            description: "First 5 digits of customer zip code"
+          - name: customer_city
+            description: "Customer city name"
+          - name: customer_state
+            description: "Customer state code"
+
+      - name: orders
+        description: "Core orders dataset"
+        columns:
+          - name: order_id
+            description: "Unique order identifier"
+          - name: customer_id
+            description: "Foreign key to customers table"
+          - name: order_status
+            description: "Order status (delivered, shipped, canceled, etc.)"
+          - name: order_purchase_timestamp
+            description: "Purchase timestamp"
+          - name: order_approved_at
+            description: "Payment approval timestamp"
+          - name: order_delivered_carrier_date
+            description: "Order posted to logistics partner timestamp"
+          - name: order_delivered_customer_date
+            description: "Actual delivery timestamp"
+          - name: order_estimated_delivery_date
+            description: "Estimated delivery date shown to customer"
+
+      - name: order_items
+        description: "Order line items with product and seller info"
+        columns:
+          - name: order_id
+            description: "Foreign key to orders table"
+          - name: order_item_id
+            description: "Sequential number identifying items within an order"
+          - name: product_id
+            description: "Foreign key to products table"
+          - name: seller_id
+            description: "Foreign key to sellers table"
+          - name: shipping_limit_date
+            description: "Seller shipping limit date"
+          - name: price
+            description: "Item price"
+          - name: freight_value
+            description: "Item freight value"
+
+      - name: order_payments
+        description: "Order payment information"
+        columns:
+          - name: order_id
+            description: "Foreign key to orders table"
+          - name: payment_sequential
+            description: "Sequential number for multiple payments on one order"
+          - name: payment_type
+            description: "Payment method (credit_card, boleto, voucher, debit_card)"
+          - name: payment_installments
+            description: "Number of installments chosen"
+          - name: payment_value
+            description: "Transaction value"
+
+      - name: order_reviews
+        description: "Customer reviews for orders"
+        columns:
+          - name: review_id
+            description: "Unique review identifier"
+          - name: order_id
+            description: "Foreign key to orders table"
+          - name: review_score
+            description: "Rating from 1 to 5"
+          - name: review_comment_title
+            description: "Review title (in Portuguese)"
+          - name: review_comment_message
+            description: "Review message (in Portuguese)"
+          - name: review_creation_date
+            description: "Date the review survey was sent"
+          - name: review_answer_timestamp
+            description: "Date the customer submitted the review"
+
+      - name: products
+        description: "Product catalog"
+        columns:
+          - name: product_id
+            description: "Unique product identifier"
+          - name: product_category_name
+            description: "Product category (in Portuguese)"
+          - name: product_name_lenght
+            description: "Character count of product name"
+          - name: product_description_lenght
+            description: "Character count of product description"
+          - name: product_photos_qty
+            description: "Number of product photos"
+          - name: product_weight_g
+            description: "Product weight in grams"
+          - name: product_length_cm
+            description: "Product length in cm"
+          - name: product_height_cm
+            description: "Product height in cm"
+          - name: product_width_cm
+            description: "Product width in cm"
+
+      - name: sellers
+        description: "Seller information"
+        columns:
+          - name: seller_id
+            description: "Unique seller identifier"
+          - name: seller_zip_code_prefix
+            description: "First 5 digits of seller zip code"
+          - name: seller_city
+            description: "Seller city name"
+          - name: seller_state
+            description: "Seller state code"
+
+      - name: geolocation
+        description: "Brazilian zip code geolocation data"
+        columns:
+          - name: geolocation_zip_code_prefix
+            description: "First 5 digits of zip code"
+          - name: geolocation_lat
+            description: "Latitude"
+          - name: geolocation_lng
+            description: "Longitude"
+          - name: geolocation_city
+            description: "City name"
+          - name: geolocation_state
+            description: "State code"
+
+      - name: product_category_translation
+        description: "Portuguese to English category name translation"
+        columns:
+          - name: product_category_name
+            description: "Category name in Portuguese"
+          - name: product_category_name_english
+            description: "Category name in English"

@@ -1,0 +1,128 @@
+version: 2
+
+models:
+  - name: stg_customers
+    description: "Cleaned customer data with standardized location fields"
+    columns:
+      - name: customer_id
+        description: "Primary key - unique per order"
+        tests:
+          - unique
+          - not_null
+      - name: customer_unique_id
+        description: "Unique customer identifier across orders"
+        tests:
+          - not_null
+      - name: state
+        description: "Two-letter state code"
+        tests:
+          - not_null
+
+  - name: stg_orders
+    description: "Cleaned order data with proper timestamp types"
+    columns:
+      - name: order_id
+        description: "Primary key"
+        tests:
+          - unique
+          - not_null
+      - name: customer_id
+        description: "Foreign key to customers"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_customers')
+              field: customer_id
+      - name: order_status
+        description: "Standardized order status"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['delivered', 'shipped', 'canceled', 'unavailable', 'invoiced', 'processing', 'created', 'approved']
+
+  - name: stg_order_items
+    description: "Cleaned order line items with calculated total"
+    columns:
+      - name: order_id
+        description: "Foreign key to orders"
+        tests:
+          - not_null
+      - name: product_id
+        description: "Foreign key to products"
+        tests:
+          - not_null
+      - name: seller_id
+        description: "Foreign key to sellers"
+        tests:
+          - not_null
+      - name: price
+        description: "Item price in BRL"
+        tests:
+          - not_null
+
+  - name: stg_order_payments
+    description: "Cleaned payment data"
+    columns:
+      - name: order_id
+        description: "Foreign key to orders"
+        tests:
+          - not_null
+      - name: payment_type
+        description: "Payment method"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['credit_card', 'boleto', 'voucher', 'debit_card', 'not_defined']
+      - name: payment_value
+        description: "Payment amount in BRL"
+        tests:
+          - not_null
+
+  - name: stg_order_reviews
+    description: "Cleaned customer review data"
+    columns:
+      - name: review_id
+        description: "Primary key"
+        tests:
+          - not_null
+      - name: order_id
+        description: "Foreign key to orders"
+        tests:
+          - not_null
+      - name: review_score
+        description: "Rating 1-5"
+        tests:
+          - not_null
+          - accepted_values:
+              values: [1, 2, 3, 4, 5]
+
+  - name: stg_products
+    description: "Cleaned product catalog with English category names and computed volume"
+    columns:
+      - name: product_id
+        description: "Primary key"
+        tests:
+          - unique
+          - not_null
+
+  - name: stg_sellers
+    description: "Cleaned seller information"
+    columns:
+      - name: seller_id
+        description: "Primary key"
+        tests:
+          - unique
+          - not_null
+      - name: state
+        description: "Two-letter state code"
+        tests:
+          - not_null
+
+  - name: stg_geolocation
+    description: "Deduplicated geolocation data (one row per zip code)"
+    columns:
+      - name: zip_code_prefix
+        description: "Primary key - zip code prefix"
+        tests:
+          - unique
+          - not_null
