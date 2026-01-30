@@ -1,0 +1,25 @@
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
+from config import settings
+from routers.dashboard import router as dashboard_router
+
+app = FastAPI(
+    title="E-Commerce Analytics API",
+    version="1.0.0",
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=settings.cors_origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+app.include_router(dashboard_router)
+
+
+@app.get("/health")
+def health_check():
+    return {"status": "ok"}

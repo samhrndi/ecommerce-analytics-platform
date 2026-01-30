@@ -17,6 +17,8 @@ from snowflake.connector import SnowflakeConnection
 # Load environment variables
 load_dotenv()
 
+os.environ['SF_OCSP_FAIL_OPEN'] = 'true'
+
 
 class SnowflakeConnector:
     """Manages Snowflake connections for the e-commerce analytics platform."""
@@ -89,7 +91,8 @@ class SnowflakeConnector:
             'warehouse': self.warehouse,
             'database': database or self.database,
             'schema': schema or self.schema,
-            'role': self.role
+            'role': self.role,
+            'insecure_mode': True,
         }
 
         if self.use_key_auth:
